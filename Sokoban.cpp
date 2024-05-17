@@ -133,7 +133,7 @@ int main() {
 				if ((player.pos.x + which_direction(button).x == boxes[k].pos.x) && (player.pos.y + which_direction(button).y == boxes[k].pos.y)) {
 					break;
 				}
-			}
+			}	// k is the box's index
 			if ((map[boxes[k].pos.x + which_direction(button).x][boxes[k].pos.y + which_direction(button).y] == '-') || (map[boxes[k].pos.x + which_direction(button).x][boxes[k].pos.y + which_direction(button).y] == '2')) {
 				// if the box can be pushed
 				if (map[boxes[k].pos.x + which_direction(button).x][boxes[k].pos.y + which_direction(button).y] == '2') {
@@ -142,79 +142,31 @@ int main() {
 						if ((boxes[k].pos.x + which_direction(button).x == ends[t].pos.x) && (boxes[k].pos.y + which_direction(button).x == ends[t].pos.y)) {
 							break;
 						}
-					}
+					}	// t is the end's index
 					boxes[k].complete = true;
-					if (is_this_end[player.pos.x][player.pos.y]) {
-						map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] = '0';
-						map[player.pos.x + 2 * which_direction(button).x][player.pos.y + 2 * which_direction(button).y] = '1';
-						map[player.pos.x][player.pos.y] = '2';
-						player.pos.x = player.pos.x + which_direction(button).x;
-						player.pos.y = player.pos.y + which_direction(button).y;
-					}
-					else {
-						map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] = '0';
-						map[player.pos.x + 2 * which_direction(button).x][player.pos.y + 2 * which_direction(button).y] = '1';
-						map[player.pos.x][player.pos.y] = '-';
-						player.pos.x = player.pos.x + which_direction(button).x;
-						player.pos.y = player.pos.y + which_direction(button).y;
-					}
-				}
-				else if ((map[boxes[k].pos.x + which_direction(button).x][boxes[k].pos.y + which_direction(button).y] == '-') && (boxes[k].complete)) {
-					// push the box away from end
-					boxes[k].complete = false;
-
-					if (is_this_end[player.pos.x][player.pos.y]) {
-						map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] = '0';
-						map[player.pos.x + 2 * which_direction(button).x][player.pos.y + 2 * which_direction(button).y] = '1';
-						map[player.pos.x][player.pos.y] = '2';
-						player.pos.x = player.pos.x + which_direction(button).x;
-						player.pos.y = player.pos.y + which_direction(button).y;
-					}
-					else {
-						map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] = '0';
-						map[player.pos.x + 2 * which_direction(button).x][player.pos.y + 2 * which_direction(button).y] = '1';
-						map[player.pos.x][player.pos.y] = '-';
-						player.pos.x = player.pos.x + which_direction(button).x;
-						player.pos.y = player.pos.y + which_direction(button).y;
-					}
 				}
 				else if (map[boxes[k].pos.x + which_direction(button).x][boxes[k].pos.y + which_direction(button).y] == '-') {
-					map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] = '0';
-					map[player.pos.x + 2 * which_direction(button).x][player.pos.y + 2 * which_direction(button).y] = '1';
-					if (is_this_end[player.pos.x][player.pos.y]) {
-						map[player.pos.x][player.pos.y] = '2';
+					if (boxes[k].complete) {
+						// push the box away from end
+						boxes[k].complete = false;
 					}
-					else {
-						map[player.pos.x][player.pos.y] = '-';
-					}
-					player.pos.x = player.pos.x + which_direction(button).x;
-					player.pos.y = player.pos.y + which_direction(button).y;
 				}
+				if (is_this_end[player.pos.x][player.pos.y]) {
+					map[player.pos.x][player.pos.y] = '2';
+				}
+				else {
+					map[player.pos.x][player.pos.y] = '-';
+				}
+				map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] = '0';
+				map[player.pos.x + 2 * which_direction(button).x][player.pos.y + 2 * which_direction(button).y] = '1';
+				player.pos.x = player.pos.x + which_direction(button).x;
+				player.pos.y = player.pos.y + which_direction(button).y;
 				boxes[k].pos.x = boxes[k].pos.x + which_direction(button).x;
 				boxes[k].pos.y = boxes[k].pos.y + which_direction(button).y;
 			}
 		}
-		else if (map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] == '2') {		//stand onto end
-			int t = 0;
-			for (t; t < ends.size(); t++) {
-				if ((player.pos.x + which_direction(button).x == ends[t].pos.x) && (player.pos.y + which_direction(button).y == ends[t].pos.y)) {
-					break;
-				}
-			}
-			if (is_this_end[player.pos.x][player.pos.y]) {
-				map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] = '0';
-				map[player.pos.x][player.pos.y] = '2';
-				player.pos.x = player.pos.x + which_direction(button).x;
-				player.pos.y = player.pos.y + which_direction(button).y;
-			}
-			else {
-				map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] = '0';
-				map[player.pos.x][player.pos.y] = '-';
-				player.pos.x = player.pos.x + which_direction(button).x;
-				player.pos.y = player.pos.y + which_direction(button).y;
-			}
-		}
-		else if (map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] == '-') {		//road
+		else if (map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] != '/') {
+			// road or end (not pushing a box)
 			if (is_this_end[player.pos.x][player.pos.y]) {
 				map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] = '0';
 				map[player.pos.x][player.pos.y] = '2';
@@ -229,8 +181,8 @@ int main() {
 			}
 		}
 		/*
-		else if (map[player.pos.x - 1][player.pos.y] == '/') {		// wall (nothing to do)
-
+		else{		// wall (nothing to do)
+		
 		}
 		*/
 
