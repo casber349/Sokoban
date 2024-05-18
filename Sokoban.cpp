@@ -148,13 +148,10 @@ open_file:
 			if ((map[boxes[k].pos.x + which_direction(button).x][boxes[k].pos.y + which_direction(button).y] == '-') || (map[boxes[k].pos.x + which_direction(button).x][boxes[k].pos.y + which_direction(button).y] == '2')) {
 				// if the box can be pushed
 				if (map[boxes[k].pos.x + which_direction(button).x][boxes[k].pos.y + which_direction(button).y] == '2') {
-					int t = 0;	// push to end
-					for (t; t < ends.size(); t++) {
-						if ((boxes[k].pos.x + which_direction(button).x == ends[t].pos.x) && (boxes[k].pos.y + which_direction(button).x == ends[t].pos.y)) {
-							break;
-						}
-					}	// t is the end's index
-					boxes[k].complete = true;
+					if (!boxes[k].complete) {
+						// push to end
+						boxes[k].complete = true;
+					}
 				}
 				else if (map[boxes[k].pos.x + which_direction(button).x][boxes[k].pos.y + which_direction(button).y] == '-') {
 					if (boxes[k].complete) {
