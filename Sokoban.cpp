@@ -73,7 +73,7 @@ int main() {
 	cout << "Enter the file to load" << endl;
 	cin >> filename;
 
-	open_file:
+open_file:
 	ifstream file;
 	file.open(filename);
 	if (file.is_open()) {
@@ -98,7 +98,7 @@ int main() {
 		cin >> filename;
 		goto open_file;
 	}
-	
+
 
 	Player player;
 	vector<Box> boxes;
@@ -193,7 +193,7 @@ int main() {
 		}
 		/*
 		else{		// wall or invalid key (nothing to do)
-		
+
 		}
 		*/
 
@@ -217,6 +217,9 @@ int main() {
 		}
 	}
 
-	cout << "You win!";
+	cout << "You win!" << endl;
+	cout << "(Press enter to quit)";
+	cin.get();
+	cin.get();
 	return 0;
 }
