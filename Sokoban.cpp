@@ -1,6 +1,6 @@
 ﻿#define UP "w"
-#define DOWN "s"
 #define LEFT "a"
+#define DOWN "s"
 #define RIGHT "d"
 
 #include <iostream>
@@ -44,17 +44,21 @@ direction which_direction(string button) {
 		dir.x = -1;
 		dir.y = 0;
 	}
-	else if (button == DOWN) {
-		dir.x = 1;
-		dir.y = 0;
-	}
 	else if (button == LEFT) {
 		dir.x = 0;
 		dir.y = -1;
 	}
+	else if (button == DOWN) {
+		dir.x = 1;
+		dir.y = 0;
+	}
 	else if (button == RIGHT) {
 		dir.x = 0;
 		dir.y = 1;
+	}
+	else {
+		dir.x = 0;
+		dir.y = 0;
 	}
 
 	return dir;
@@ -66,25 +70,35 @@ int main() {
 	vector<string> map;
 
 	string filename;
+	cout << "Enter the file to load" << endl;
 	cin >> filename;
 
+	open_file:
 	ifstream file;
 	file.open(filename);
-	while (!file.eof()) {
-		string line;
-		getline(file, line);
-		if (first_line) {
-			height = stoi(line.substr(0, line.find(' ')));
-			width = stoi(line.substr(line.find(' ') + 1));
-			first_line = false;
-		}
-		else {
-			if (map.size() < height) {
-				map.push_back(line);
+	if (file.is_open()) {
+		while (!file.eof()) {
+			string line;
+			getline(file, line);
+			if (first_line) {
+				height = stoi(line.substr(0, line.find(' ')));
+				width = stoi(line.substr(line.find(' ') + 1));
+				first_line = false;
+			}
+			else {
+				if (map.size() < height) {
+					map.push_back(line);
+				}
 			}
 		}
+		file.close();
 	}
-	file.close();
+	else {
+		cout << "Unable to open file!" << endl;
+		cin >> filename;
+		goto open_file;
+	}
+	
 
 	Player player;
 	vector<Box> boxes;
@@ -119,11 +133,8 @@ int main() {
 	for (int j = 0; j < map.size(); j++) {
 		cout << map[j] << endl;
 	}
+	cout << "Use WASD to move(Up: w, Left: a, Down: s, Right: d)";
 	cin >> button;
-	while ((button != UP) && (button != DOWN) && (button != LEFT) && (button != RIGHT)) {
-		cout << "Invalid input!" << endl;
-		cin >> button;
-	}
 
 	while (!goal) {
 		if (map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] == '1') {
@@ -165,7 +176,7 @@ int main() {
 				boxes[k].pos.y = boxes[k].pos.y + which_direction(button).y;
 			}
 		}
-		else if (map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] != '/') {
+		else if ((map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] == '-') || (map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] == '2')) {
 			// road or end (not pushing a box)
 			if (is_this_end[player.pos.x][player.pos.y]) {
 				map[player.pos.x + which_direction(button).x][player.pos.y + which_direction(button).y] = '0';
@@ -181,7 +192,7 @@ int main() {
 			}
 		}
 		/*
-		else{		// wall (nothing to do)
+		else{		// wall or invalid key (nothing to do)
 		
 		}
 		*/
@@ -201,11 +212,8 @@ int main() {
 			goal = true;
 		}
 		if (!goal) {
+			cout << "Use WASD to move(Up: w, Left: a, Down: s, Right: d)";
 			cin >> button;
-			while ((button != UP) && (button != DOWN) && (button != LEFT) && (button != RIGHT)) {
-				cout << "Invalid input!" << endl;
-				cin >> button;
-			}
 		}
 	}
 
